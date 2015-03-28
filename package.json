@@ -1,0 +1,16 @@
+{
+  "name": "react-loose-forms",
+  "version": "0.0.0",
+  "description": "form library for React that is very flexible yet powerful",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/espeakers/react-loose-forms.git"
+  },
+  "author": "espeakers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/espeakers/react-loose-forms/issues"
+  },
+  "homepage": "https://github.com/espeakers/react-loose-forms"
+}
