@@ -12,5 +12,15 @@
   "bugs": {
     "url": "https://github.com/espeakers/react-loose-forms/issues"
   },
-  "homepage": "https://github.com/espeakers/react-loose-forms"
+  "homepage": "https://github.com/espeakers/react-loose-forms",
+  "devDependencies": {
+    "tap-dot": "^1.0.0",
+    "tape": "^3.5.0"
+  },
+  "scripts": {
+    "test": "node test.js | tap-dot"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
 }
