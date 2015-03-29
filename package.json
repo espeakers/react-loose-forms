@@ -1,6 +1,6 @@
 {
   "name": "react-loose-forms",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "form library for React that is very flexible yet powerful",
   "main": "index.js",
   "repository": {
