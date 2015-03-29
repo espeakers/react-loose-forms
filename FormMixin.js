@@ -1,59 +1,50 @@
-var _ = require('lodash');
+var is = require('is');
+var clone = require('clone');
 var InputTypes = require('./InputTypes');
 
 var FormMixin = {
 	getInitialState: function(){
 		return {
-			initial_values_source_version: _.isFunction(this.getInitialValuesSourceVersion) ? this.getInitialValuesSourceVersion(this.props) : null,
+			initial_values_source_version: is.fn(this.getInitialValuesSourceVersion) ? this.getInitialValuesSourceVersion(this.props) : null,
 			data: this.____getInitialValues(this.props),
 			errors: {},
 			submit_attempts: 0
 		};
 	},
 	componentWillReceiveProps: function(new_props){
-		if(_.isFunction(this.getInitialValuesSourceVersion)){
+		if(is.fn(this.getInitialValuesSourceVersion)){
 			var initial_values_source_version = this.getInitialValuesSourceVersion(new_props);
 			if(this.state.initial_values_source_version !== initial_values_source_version){
 				this.setState({initial_values_source_version: initial_values_source_version, data: this.____getInitialValues(new_props), errors: {}, submit_attempts: 0});
 			}
 		}
 	},
-	Form_validate: function(callback){
+	Form_validate: function(){
 		var fields = this.buildFields();
 		var data = this.state.data;
-		this.setState({errors: validateFields(fields, data)}, function(){
-				if(_.isFunction(callback)){
-					callback();
-				}
-			}
-		);
+		return validateFields(fields, data);
 	},
 	Form_onSubmit: function(e){
 		if(e && e.preventDefault){
 			e.preventDefault();
 		}
 		var self = this;
-		var fields = this.buildFields();
-		var data = this.state.data;
-
 		this.setState({
 				submit_attempts: this.state.submit_attempts + 1,
-				errors: validateFields(fields, data)
+				errors: this.Form_validate()
 			},
 			function(){
-				var has_error = _.filter(_.values(self.state.errors)).length > 0;
-				if(has_error){
-					if(_.isFunction(self.props.onSubmitFail)){
-						self.props.onSubmitFail(self.state.errors);
+				if(is.empty(self.state.errors)){
+					if(is.fn(self.props.onSubmit)){
+						self.props.onSubmit(self.state.data);
 					}
 				}else{
-					if(_.isFunction(self.props.onSubmit)){
-						self.props.onSubmit(self.state.data);
+					if(is.fn(self.props.onSubmitFail)){
+						self.props.onSubmitFail(self.state.errors);
 					}
 				}
 			}
 		);
-		return false;
 	},
 	Form_onChange: function(field_path, new_value){
 		var self = this;
@@ -67,7 +58,7 @@ var FormMixin = {
 			data: data,
 			errors: should_validate ? validateFields(fields, data) : null
 		}, function(){
-			if(_.isFunction(self.onFormChanged)){
+			if(is.fn(self.onFormChanged)){
 				self.onFormChanged(field_path, new_value);
 			}
 		});
@@ -85,47 +76,49 @@ var FormMixin = {
 		this.setState({data: this.____getInitialValues(this.props), errors: {}, submit_attempts: 0});
 	},
 	Form_areChangesMade: function(props){
-		return !_.isEqual(this.state.data, this.____getInitialValues(props || this.props));
+		return !is.equal(this.state.data, this.____getInitialValues(props || this.props));
 	},
 	____getInitialValues: function(props){
-		if(_.isFunction(this.getInitialValues)){
-			return _.cloneDeep(this.getInitialValues(props)) || {};
+		if(is.fn(this.getInitialValues)){
+			return clone(this.getInitialValues(props) || {});
 		}
 		return {};
 	}
 };
 
-var default_validation_fn = function(value, field){
+var defaultValidationFn = function(value, field){
 	var valid = false;
-	if(_.isBoolean(value)){
+	if(is.boolean(value)){
 		valid = value === true;
-	}else if(_.isNumber(value)){
+	}else if(is.number(value)){
 		valid = value !== 0;
-	}else if(_.isDate(value)){
+	}else if(is.date(value)){
 		valid = true;
 	}else{
-		valid = !_.isEmpty(value);
+		valid = !is.empty(value);
 	}
 	return valid || field.label + ' is required';
 };
 
 var validateFields = function(fields, data){
-	return _.mapValues(fields, function(field, field_path){
-		var validation_fn = default_validation_fn;
-		if(_.isFunction(field.validate)){
+	var errors = {};
+	Object.keys(fields).forEach(function(field_path){
+		var field = fields[field_path];
+		var validation_fn = defaultValidationFn;
+		if(is.fn(field.validate)){
 			validation_fn = field.validate;
 		}else{
 			var input = InputTypes.getInputByType(field.type);
-			if(_.isFunction(input.validate)){
+			if(is.fn(input && input.validate)){
 				validation_fn = input.validate;
 			}
 		}
 		var resp = validation_fn(data[field_path], field);
-		if(resp === true){
-			return false;
+		if(resp !== true){
+			errors[field_path] = is.string(resp) ? resp : 'Please check your input.';
 		}
-		return _.isString(resp) ? resp : 'Please check your input.';
 	});
+	return errors;
 };
 
 module.exports = FormMixin;

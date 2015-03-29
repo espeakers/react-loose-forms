@@ -21,6 +21,7 @@
     "test": "node test.js | tap-dot"
   },
   "dependencies": {
-    "lodash": "~2.4.1"
+    "clone": "^1.0.2",
+    "is": "^3.0.1"
   }
 }
