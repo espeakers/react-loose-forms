@@ -5,22 +5,25 @@ var InputTypes = require('./InputTypes');
 var FormMixin = {
 	getInitialState: function(){
 		return {
-			initial_values_source_version: is.fn(this.getInitialValuesSourceVersion) ? this.getInitialValuesSourceVersion(this.props) : null,
+			initial_values_source_version: this.____getInitialValuesSourceVersion(this.props),
 			data: this.____getInitialValues(this.props),
 			errors: {},
 			submit_attempts: 0
 		};
 	},
 	componentWillReceiveProps: function(new_props){
-		if(is.fn(this.getInitialValuesSourceVersion)){
-			var initial_values_source_version = this.getInitialValuesSourceVersion(new_props);
-			if(this.state.initial_values_source_version !== initial_values_source_version){
-				this.setState({initial_values_source_version: initial_values_source_version, data: this.____getInitialValues(new_props), errors: {}, submit_attempts: 0});
-			}
+		var initial_values_source_version = this.____getInitialValuesSourceVersion(new_props);
+		if(this.state.initial_values_source_version !== initial_values_source_version){
+			this.setState({
+				initial_values_source_version: initial_values_source_version,
+				data: this.____getInitialValues(new_props),
+				errors: {},
+				submit_attempts: 0
+			});
 		}
 	},
 	Form_validate: function(){
-		var fields = this.buildFields();
+		var fields = this.____buildSchema();
 		var data = this.state.data;
 		return validateFields(fields, data);
 	},
@@ -30,25 +33,19 @@ var FormMixin = {
 		}
 		var self = this;
 		this.setState({
-				submit_attempts: this.state.submit_attempts + 1,
-				errors: this.Form_validate()
-			},
-			function(){
-				if(is.empty(self.state.errors)){
-					if(is.fn(self.props.onSubmit)){
-						self.props.onSubmit(self.state.data);
-					}
-				}else{
-					if(is.fn(self.props.onSubmitFail)){
-						self.props.onSubmitFail(self.state.errors);
-					}
-				}
+			submit_attempts: this.state.submit_attempts + 1,
+			errors: this.Form_validate()
+		}, function(){
+			if(is.empty(self.state.errors)){
+				self.____onSubmit(self.state.data);
+			}else{
+				self.____onSubmitFail(self.state.errors);
 			}
-		);
+		});
 	},
 	Form_onChange: function(field_path, new_value){
 		var self = this;
-		var fields = this.buildFields();
+		var fields = this.____buildSchema();
 		var should_validate = this.state.submit_attempts > 0;
 		var data = this.state.data;
 
@@ -58,9 +55,7 @@ var FormMixin = {
 			data: data,
 			errors: should_validate ? validateFields(fields, data) : null
 		}, function(){
-			if(is.fn(self.onFormChanged)){
-				self.onFormChanged(field_path, new_value);
-			}
+			self.____onFormChanged(field_path, new_value);
 		});
 	},
 	Form_buildInput: function(field, field_path){
@@ -78,11 +73,42 @@ var FormMixin = {
 	Form_areChangesMade: function(props){
 		return !is.equal(this.state.data, this.____getInitialValues(props || this.props));
 	},
+
+	//Below are functions that the child can implement
+	____buildSchema: function(){
+		if(is.fn(this.buildSchema)){
+			return this.buildSchema();
+		}else{
+			console.warn("react-loose-forms FormMixin expects there to be a funciton on the compoent called buildSchema that returns the schema for the form.");
+			return {};
+		}
+	},
+	____getInitialValuesSourceVersion: function(props){
+		if(is.fn(this.getInitialValuesSourceVersion)){
+			return this.getInitialValuesSourceVersion(props);
+		}
+		return null;
+	},
 	____getInitialValues: function(props){
 		if(is.fn(this.getInitialValues)){
 			return clone(this.getInitialValues(props) || {});
 		}
 		return {};
+	},
+	____onFormChanged: function(field_path, new_value){
+		if(is.fn(this.onFormChanged)){
+			this.onFormChanged(field_path, new_value);
+		}
+	},
+	____onSubmit: function(data){
+		if(is.fn(this.props.onSubmit)){
+			this.props.onSubmit(data);
+		}
+	},
+	____onSubmitFail: function(errors){
+		if(is.fn(this.props.onSubmitFail)){
+			this.props.onSubmitFail(errors);
+		}
 	}
 };
 
