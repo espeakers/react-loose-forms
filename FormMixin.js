@@ -129,7 +129,7 @@ var defaultValidationFn = function(value, field){
 	}else{
 		valid = !is.empty(value);
 	}
-	return valid || field.label + ' is required';
+	return valid || (field.label || field.name) + ' is required';
 };
 
 var validateFields = function(fields, data){
