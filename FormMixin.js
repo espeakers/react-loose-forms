@@ -43,28 +43,28 @@ var FormMixin = {
 			}
 		});
 	},
-	Form_onChange: function(field_path, new_value){
+	Form_onChange: function(field_name, new_value){
 		var self = this;
 		var fields = this.____buildSchema();
 		var should_validate = this.state.submit_attempts > 0;
 		var data = this.state.data;
 
-		data[field_path] = new_value;
+		data[field_name] = new_value;
 
 		this.setState({
 			data: data,
 			errors: should_validate ? validateFields(fields, data) : null
 		}, function(){
-			self.____onFormChanged(field_path, new_value);
+			self.____onFormChanged(field_name, new_value);
 		});
 	},
-	Form_buildInput: function(field, field_path){
+	Form_buildInput: function(field, field_name){
 		var input = InputTypes.getInputByType(field.type);
 		return input.component({
 			field: field,
-			value: this.state.data[field_path],
+			value: this.state.data[field_name],
 			onChange: this.Form_onChange,
-			field_path: field_path
+			field_name: field_name
 		});
 	},
 	Form_reset: function(){
@@ -95,9 +95,9 @@ var FormMixin = {
 		}
 		return {};
 	},
-	____onFormChanged: function(field_path, new_value){
+	____onFormChanged: function(field_name, new_value){
 		if(is.fn(this.onFormChanged)){
-			this.onFormChanged(field_path, new_value);
+			this.onFormChanged(field_name, new_value);
 		}
 	},
 	____onSubmit: function(data){
@@ -128,8 +128,8 @@ var defaultValidationFn = function(value, field){
 
 var validateFields = function(fields, data){
 	var errors = {};
-	Object.keys(fields).forEach(function(field_path){
-		var field = fields[field_path];
+	Object.keys(fields).forEach(function(field_name){
+		var field = fields[field_name];
 		var validation_fn = defaultValidationFn;
 		if(is.fn(field.validate)){
 			validation_fn = field.validate;
@@ -139,9 +139,9 @@ var validateFields = function(fields, data){
 				validation_fn = input.validate;
 			}
 		}
-		var resp = validation_fn(data[field_path], field);
+		var resp = validation_fn(data[field_name], field);
 		if(resp !== true){
-			errors[field_path] = is.string(resp) ? resp : 'Please check your input.';
+			errors[field_name] = is.string(resp) ? resp : 'Please check your input.';
 		}
 	});
 	return errors;
