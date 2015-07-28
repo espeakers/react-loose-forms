@@ -77,6 +77,7 @@ var FormMixin = {
 		Object.keys(schema).forEach(function(name){
 			schema[name].name = name;
 		});
+		return schema;
 	},
 
 	//Below are functions that the child can implement
