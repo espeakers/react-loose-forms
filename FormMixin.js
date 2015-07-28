@@ -23,7 +23,7 @@ var FormMixin = {
 		}
 	},
 	Form_validate: function(){
-		var fields = this.____buildSchema();
+		var fields = this.Form_buildSchema();
 		var data = this.state.data;
 		return validateFields(fields, data);
 	},
@@ -45,7 +45,7 @@ var FormMixin = {
 	},
 	Form_onChange: function(field_name, new_value){
 		var self = this;
-		var fields = this.____buildSchema();
+		var fields = this.Form_buildSchema();
 		var should_validate = this.state.submit_attempts > 0;
 		var data = this.state.data;
 
@@ -58,13 +58,12 @@ var FormMixin = {
 			self.____onFormChanged(field_name, new_value);
 		});
 	},
-	Form_buildInput: function(field, field_name){
+	Form_buildInput: function(field){
 		var input = InputTypes.getInputByType(field.type);
 		return input.component({
 			field: field,
-			value: this.state.data[field_name],
-			onChange: this.Form_onChange,
-			field_name: field_name
+			value: this.state.data[field.name],
+			onChange: this.Form_onChange
 		});
 	},
 	Form_reset: function(){
@@ -72,6 +71,12 @@ var FormMixin = {
 	},
 	Form_areChangesMade: function(props){
 		return !is.equal(this.state.data, this.____getInitialValues(props || this.props));
+	},
+	Form_buildSchema: function(){
+		var schema = this.____buildSchema();
+		Object.keys(schema).forEach(function(name){
+			schema[name].name = name;
+		});
 	},
 
 	//Below are functions that the child can implement
