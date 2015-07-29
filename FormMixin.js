@@ -59,11 +59,14 @@ var FormMixin = {
 		});
 	},
 	Form_buildInput: function(field){
+		var self = this;
 		var input = InputTypes.getInputByType(field.type);
 		return input.component({
 			field: field,
 			value: this.state.data[field.name],
-			onChange: this.Form_onChange
+			onChange: function(value){
+				self.Form_onChange(field.name, value);
+			}
 		});
 	},
 	Form_reset: function(){
@@ -119,17 +122,7 @@ var FormMixin = {
 };
 
 var defaultValidationFn = function(value, field){
-	var valid = false;
-	if(is.boolean(value)){
-		valid = value === true;
-	}else if(is.number(value)){
-		valid = value !== 0;
-	}else if(is.date(value)){
-		valid = true;
-	}else{
-		valid = !is.empty(value);
-	}
-	return valid || (field.label || field.name) + ' is required';
+	return true;
 };
 
 var validateFields = function(fields, data){
@@ -147,7 +140,7 @@ var validateFields = function(fields, data){
 		}
 		var resp = validation_fn(data[field_name], field);
 		if(resp !== true){
-			errors[field_name] = is.string(resp) ? resp : 'Please check your input.';
+			errors[field_name] = resp;
 		}
 	});
 	return errors;
