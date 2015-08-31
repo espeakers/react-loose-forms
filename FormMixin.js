@@ -96,7 +96,7 @@ var FormMixin = {
 		if(is.fn(this.getInitialValuesSourceVersion)){
 			return this.getInitialValuesSourceVersion(props);
 		}
-		return null;
+		return JSON.stringify(this.____getInitialValues(props));
 	},
 	____getInitialValues: function(props){
 		if(is.fn(this.getInitialValues)){
