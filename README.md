@@ -32,16 +32,16 @@ The schema is a simple object/map/hash  where the keys are the field names and t
                               //simply returns true
 
           //return true if valid, otherwise return an error. An error can
-					//be anything really, typically you can just return a string that
-					//represents the error message that should be displayed to the user.
+          //be anything really, typically you can just return a string that
+          //represents the error message that should be displayed to the user.
         }
 
         name: //don't define "name", the mixin will stomp over this and set
-							//it to the field name. In this case it would be "username"
+              //it to the field name. In this case it would be "username"
 
         //you can tac on anything else you want. It will be visible to the
-				//input component. For example a select input might want you to
-				//specify an "options" property with an array of options to select from
+        //input component. For example a select input might want you to
+        //specify an "options" property with an array of options to select from
       },
       ...
     };
