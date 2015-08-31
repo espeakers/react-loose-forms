@@ -14,34 +14,34 @@ Return your form fields schema. This method is called during state changes so yo
 The schema is a simple object/map/hash  where the keys are the field names and the value is the schema for the field. 
 
 ```js
-	mixins: [FormMixin],
+  mixins: [FormMixin],
 
-	...
+  ...
 
-	buildSchema(){
-		var data = this.state.data;//this is how you can get access to the current state of the form
+  buildSchema: function(){
+    var data = this.state.data;//this is how you can get access to the current state of the form
 
-		return {
-			username: {
-				type: "text", //at the bare minimum every field should define what type of input it is
+    return {
+      username: {
+        type: "text", //at the bare minimum every field should define what type of input it is
 
-				validate: function(v){//optionally add a validation function for this input. If you don't provide one it will fallback to the input types default validation, if it doesn't have one it simply returns true
-					//return true if valid, otherwise return an error. An error can be anything really, typically you can just return a string that represents the error message that should be displayed to the user.
-				}
+        validate: function(v){//optionally add a validation function for this input. If you don't provide one it will fallback to the input types default validation, if it doesn't have one it simply returns true
+          //return true if valid, otherwise return an error. An error can be anything really, typically you can just return a string that represents the error message that should be displayed to the user.
+        }
 
-				name: //don't define this, the mixin will stomp over this and set it to the field name. In this case it would be "username"
+        name: //don't define this, the mixin will stomp over this and set it to the field name. In this case it would be "username"
 
-				//you can tac on anything else you want. It will be visible to the input component. For example a select input might want you to specify an "options" property with an array of options to select from
-			},
-			...
-		};
-	}
+        //you can tac on anything else you want. It will be visible to the input component. For example a select input might want you to specify an "options" property with an array of options to select from
+      },
+      ...
+    };
+  }
 
-	...
+  ...
 
-	render: function(){
-		...
-	}
+  render: function(){
+    ...
+  }
 ```
 See [react-loose-forms.examples](https://github.com/espeakers/react-loose-forms.examples) for more examples.
 
@@ -76,13 +76,13 @@ Call this to get the current schema. This calls your buildSchema method but ensu
 ### this.Form\_onSubmit(e)
 Submit the form. This first validates the form state. If an event is passed as the first argument it will call preventDefault on it. Typically you use it like this:
 ```js
-	render: function(){
+  render: function(){
 
-		return React.createElement("form", {onSubmit: this.Form_onSubmit},
-			...
-		);
-	}
-	...
+    return React.createElement("form", {onSubmit: this.Form_onSubmit},
+      ...
+    );
+  }
+  ...
 ```
 
 ### this.Form\_buildInput(field)
@@ -121,9 +121,9 @@ var InputTypes = require("react-loose-forms/InputTypes");
 This is how you register an input type. For example, if we want to register an input type "color", you simply:
 ```js
 InputTypes.setInputType("color", {
-	component: ..., // the React component that extends FormInputMixin
+  component: ..., // the React component that extends FormInputMixin
 
-	validate:	... // a custom default validation for this input type
+  validate: ... // a custom default validation for this input type
 });
 ```
 
