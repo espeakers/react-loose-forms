@@ -15,30 +15,38 @@ The schema is a simple object/map/hash  where the keys are the field names and t
 
 ```js
   mixins: [FormMixin],
-
   ...
-
   buildSchema: function(){
-    var data = this.state.data;//this is how you can get access to the current state of the form
+    var data = this.state.data;//this is how you can get access to the
+                               //current state of the form
 
     return {
       username: {
-        type: "text", //at the bare minimum every field should define what type of input it is
+        type: "text", //at the bare minimum every field should define
+                      //what type of input it is
 
-        validate: function(v){//optionally add a validation function for this input. If you don't provide one it will fallback to the input types default validation, if it doesn't have one it simply returns true
-          //return true if valid, otherwise return an error. An error can be anything really, typically you can just return a string that represents the error message that should be displayed to the user.
+        validate: function(v){//optionally add a validation function for
+                              //this input. If you don't provide one it
+                              //will fallback to the input types default
+                              //validation, if it doesn't have one it
+                              //simply returns true
+
+          //return true if valid, otherwise return an error. An error can
+					//be anything really, typically you can just return a string that
+					//represents the error message that should be displayed to the user.
         }
 
-        name: //don't define this, the mixin will stomp over this and set it to the field name. In this case it would be "username"
+        name: //don't define "name", the mixin will stomp over this and set
+							//it to the field name. In this case it would be "username"
 
-        //you can tac on anything else you want. It will be visible to the input component. For example a select input might want you to specify an "options" property with an array of options to select from
+        //you can tac on anything else you want. It will be visible to the
+				//input component. For example a select input might want you to
+				//specify an "options" property with an array of options to select from
       },
       ...
     };
-  }
-
+  },
   ...
-
   render: function(){
     ...
   }
@@ -82,7 +90,6 @@ Submit the form. This first validates the form state. If an event is passed as t
       ...
     );
   }
-  ...
 ```
 
 ### this.Form\_buildInput(field)
