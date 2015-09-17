@@ -1,7 +1,13 @@
 # react-loose-forms
 A form library for React that flexible and dynamic allowing it to be effective in many (if not all) situations where you need to collect user input.
 
-See [react-loose-forms.examples](https://github.com/espeakers/react-loose-forms.examples) for some working examples.
+This library is focused on the schema and state management of forms. Rendering and layout of input fields are handled separately.
+ * [react-loose-forms.bootstrap3](https://github.com/espeakers/react-loose-forms.bootstrap3) - bootstrap 3 styled inputs and field layouts
+ * others welcome!
+
+## Examples
+See [react-loose-forms.examples](https://github.com/espeakers/react-loose-forms.examples)
+
 
 ## FormMixin
 ```js
@@ -110,53 +116,43 @@ Returns true if the form state is different than the initial state.
 Call this if you manually want to update the state of a form field. (Internally this is what input components call to update their state.)
 
 
-## FormInputMixin
-```js
-var FormInputMixin = require("react-loose-forms/FormInputMixin");
-```
-Use this mixin when creating a React component for an input.
-
-### this.FormInput\_newValue(value)
-Call this when the value of the input has changed.
-
 ## InputTypes
 ```js
 var InputTypes = require("react-loose-forms/InputTypes");
 ```
 
 ### InputTypes.setInputType(type, input)
-This is how you register an input type. For example, if we want to register an input type "color", you simply:
+This is how you register an input type.
 ```js
-InputTypes.setInputType("color", {
-  component: ..., // the React component that extends FormInputMixin
+InputTypes.setInputType("your_input_type_name_goes_here", {
+  component: // (required)
+             // the React component that renders the input
+             // It takes 3 props:
+             //  * field -> the field schema to render
+             //  * value -> the current value
+             //  * onChange(new_value) -> call this on new values
 
-  validate: ... // a custom default validation for this input type
+  validate: // (optional) a default validation function for this input type
 });
 ```
+See [react-loose-forms.bootstrap3/inputs](https://github.com/espeakers/react-loose-forms.bootstrap3/tree/master/inputs) for some example inputs.
 
 ### InputTypes.getInputByType(type)
 This returns the input object associated with the type name. If the type is not found it returns the input for "text". (since a "password" or "email" type usually is the same as a text field)
 
-# License
+## Changelog
+This project follows [semantic versioning](http://semver.org/) for releases.
 
-The MIT License (MIT)
+### v2.0.0
+ * removing FormInputMixin (Now instead of this.FormInput\_newValue(value), just use this.props.onChange(value))
+ * getInitialValuesSourceVersion json stringifies getInitialValues by default
+ * The default validation simply returns true
 
-Copyright (c) 2015 eSpeakers.com
+### v1.0.1
+ * fixing validation error message
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+### v1.0.0
+ * initial release
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## License
+MIT

@@ -3,6 +3,11 @@
   "version": "1.0.1",
   "description": "A form library for React that flexible and dynamic allowing it to be effective in many (if not all) situations where you need to collect user input.",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "FormMixin.js",
+    "InputTypes.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/espeakers/react-loose-forms.git"
@@ -14,11 +19,10 @@
   },
   "homepage": "https://github.com/espeakers/react-loose-forms",
   "devDependencies": {
-    "tap-dot": "^1.0.0",
     "tape": "^3.5.0"
   },
   "scripts": {
-    "test": "node test.js | tap-dot"
+    "test": "node test.js"
   },
   "dependencies": {
     "clone": "^1.0.2",
