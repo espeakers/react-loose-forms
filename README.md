@@ -1,7 +1,7 @@
 # react-loose-forms
 A form library for React that flexible and dynamic allowing it to be effective in many (if not all) situations where you need to collect user input.
 
-This library is focused on the schema and state management of forms. Rendering and layout of input fields are handled separately.
+This library is focused on the schema and state management of forms. Rendering and layout of input fields are handled separately. Here are libraries that help provide the layout and rendering of input fields:
  * [react-loose-forms.bootstrap3](https://github.com/espeakers/react-loose-forms.bootstrap3) - bootstrap 3 styled inputs and field layouts
  * others welcome!
 
@@ -67,7 +67,7 @@ This is called whenever a field changes state. This way you can observe state ch
 Define this to setup the initial values for your form fields. Simply return an object keyed by field name. Use the props passed in the function rather than this.props.
 
 ### child method: getInitialValuesSourceVersion(props)
-Return a string that is used to identify which initial values you are working with. When this string changes, the FormMixin will know that it is now working with different underlying data.
+Return a string that is used to identify which initial values you are working with. When this string changes, the FormMixin will know that it is now working with different underlying data. By default it will `JSON.stringify(this.getInitialValues(props))`
 
 ### this.props.onSubmit(data)
 This is called when a user submits the form and it passes validation. The data is the current this.state.data.
@@ -143,15 +143,15 @@ This returns the input object associated with the type name. If the type is not 
 ## Changelog
 This project follows [semantic versioning](http://semver.org/) for releases.
 
-### v2.0.0
- * removing FormInputMixin (Now instead of this.FormInput\_newValue(value), just use this.props.onChange(value))
- * getInitialValuesSourceVersion json stringifies getInitialValues by default
+#### v2.0.0
+ * removing `FormInputMixin` (instead of `this.FormInput\_newValue(value)`, just use `this.props.onChange(value)`)
+ * `getInitialValuesSourceVersion` json stringifies `getInitialValues` by default
  * The default validation simply returns true
 
-### v1.0.1
+#### v1.0.1
  * fixing validation error message
 
-### v1.0.0
+#### v1.0.0
  * initial release
 
 ## License
