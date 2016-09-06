@@ -47,7 +47,8 @@ var FormMixin = {
 		var self = this;
 		var fields = this.Form_buildSchema();
 		var should_validate = this.state.submit_attempts > 0;
-		var data = this.state.data;
+		// Don't mutate the state data directly
+		var data = clone(this.state.data);
 
 		data[field_name] = new_value;
 
