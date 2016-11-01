@@ -1,5 +1,6 @@
 var is = require('is');
 var clone = require('clone');
+var xtend = require('xtend');
 var InputTypes = require('./InputTypes');
 
 var FormMixin = {
@@ -47,10 +48,11 @@ var FormMixin = {
 		var self = this;
 		var fields = this.Form_buildSchema();
 		var should_validate = this.state.submit_attempts > 0;
-		// Don't mutate the state data directly
-		var data = clone(this.state.data);
 
-		data[field_name] = new_value;
+		//merge in the new value without mutating this.state.data
+		var o = {};
+		o[field_name] = new_value;
+		var data = xtend(this.state.data, o);
 
 		this.setState({
 			data: data,
