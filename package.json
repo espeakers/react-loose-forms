@@ -1,6 +1,6 @@
 {
   "name": "react-loose-forms",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A form library for React that flexible and dynamic allowing it to be effective in many (if not all) situations where you need to collect user input.",
   "main": "index.js",
   "files": [
