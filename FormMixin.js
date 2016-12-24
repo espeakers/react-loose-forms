@@ -20,7 +20,7 @@ var FormMixin = {
 				data: this.____getInitialValues(new_props),
 				errors: {},
 				submit_attempts: 0
-			});
+			}, this.____onInitialValuesChanged);
 		}
 	},
 	Form_validate: function(){
@@ -110,6 +110,11 @@ var FormMixin = {
 	____onFormChanged: function(field_name, new_value){
 		if(is.fn(this.onFormChanged)){
 			this.onFormChanged(field_name, new_value);
+		}
+	},
+	____onInitialValuesChanged: function(){
+		if(is.fn(this.onInitialValuesChanged)){
+			this.onInitialValuesChanged();
 		}
 	},
 	____onSubmit: function(data){

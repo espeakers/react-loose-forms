@@ -63,6 +63,9 @@ See [react-loose-forms.examples](https://github.com/espeakers/react-loose-forms.
 ### child method: onFormChanged(field\_name, new\_value)
 This is called whenever a field changes state. This way you can observe state changes.
 
+### child method: onInitialValuesChanged()
+This is called whenever getInitialValuesSourceVersion changes and the new form state has been setup.
+
 ### child method: getInitialValues(props)
 Define this to setup the initial values for your form fields. Simply return an object keyed by field name. Use the props passed in the function rather than this.props.
 
